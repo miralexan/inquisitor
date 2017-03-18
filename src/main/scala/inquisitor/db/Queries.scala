@@ -8,10 +8,10 @@ import inquisitor.db.Schema._
 
 object Queries {
 
-  def getTestCaseIds(tcs: Traversable[TestCase]) =
-    testCases.filter { f =>
-      tcs.map(tc => f.name === tc.name && f.testClass === tc.className).reduceLeft(_ || _)
-    }
+  def getTestCaseIds()(implicit ec: ExecutionContext) = testCases.result.map { tcs =>
+    if (tcs.isEmpty) Map.empty[TestCase, Int]
+    else tcs.foldLeft(Map.empty[TestCase, Int]) { case (map, (id, clazz, name)) => map + ((TestCase(clazz, name), id)) }
+  }
 
   def insertTestCases(tcs: Iterable[TestCase])(implicit ec: ExecutionContext) =
     ((testCases returning testCases.map(_.testId) into ((tc, id) => (id, tc._2, tc._3))) ++= tcs.map(tc => (0, tc.className, tc.name)))

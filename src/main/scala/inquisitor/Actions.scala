@@ -47,7 +47,7 @@ object Actions extends StrictLogging {
 
   def execute[T](dbio: DBIOAction[T, NoStream, Effect.All])(config: Config) = {
     val db = Database.forURL(buildSqliteUrl(config.outFile), driver = "org.sqlite.JDBC")
-    val databaseExecution = db.run(dbio)
+    val databaseExecution = db.run(dbio.transactionally)
     databaseExecution.onComplete(_ => db.close())
     databaseExecution
   }
@@ -55,12 +55,10 @@ object Actions extends StrictLogging {
   def buildSqliteUrl(f: File) = new URI("jdbc:sqlite", f.toString(), null).toString()
 
   def getTestCaseMap(rows: Traversable[(Int, String, String)]) =
-    if (rows.isEmpty) Map[TestCase, Int]()
-    else rows.map { case (id, clazz, name) => Map((TestCase(clazz, name), id)) }.reduce(_ ++ _)
+    if (rows.isEmpty) Map.empty[TestCase, Int]
+    else rows.foldLeft(Map.empty[TestCase, Int]) { case (map, (id, clazz, name)) => map + ((TestCase(clazz, name), id)) }
 
-  def getExistingTestCaseIds(tcs: Seq[TestCase]) = getTestCaseIds(tcs.toSet).result.map(getTestCaseMap(_))
-
-  def getOrInsertTestCases(tcs: Seq[TestCase]) = getExistingTestCaseIds(tcs).flatMap { f =>
+  def getOrInsertTestCases(tcs: Seq[TestCase]) = getTestCaseIds().flatMap { f =>
     insertTestCases(tcs.toSet.filter(!f.contains(_))).map(g => f ++ getTestCaseMap(g))
   }
 
