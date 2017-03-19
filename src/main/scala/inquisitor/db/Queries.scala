@@ -19,7 +19,7 @@ object Queries {
   def insertTestResults(trs: Iterable[TestResult], f: TestResult => Int)(implicit ec: ExecutionContext) =
     testResults ++= trs.map(tr => (0, f(tr), ResultTypeFlag.fromResultType(tr.resultType), tr.resultType.message, tr.time))
 
-  def getTestResultsInStatus()(implicit ec: ExecutionContext) =
-    testCases.filter { x => testResults.filter(y => y.testId === x.testId && y.resultTypeFlag === ResultTypeFlag.success).size === 0 }.result
-      .map(_.map { case (_, clazz, name) => TestCase(clazz, name) })
+  def getTestCasesWithNoSuccesses()(implicit ec: ExecutionContext) =
+    testCases.filter { x => testResults.filter(y => y.testId === x.testId && y.resultTypeFlag.inSet(ResultTypeFlag.success + ResultTypeFlag.skipped)).size === 0 }
+      .sortBy(tc => (tc.testClass.asc, tc.name.asc)).result.map(_.map { case (_, clazz, name) => TestCase(clazz, name) })
 }

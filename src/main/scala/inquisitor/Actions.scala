@@ -35,8 +35,17 @@ object Actions extends StrictLogging {
   }
 
   val Validate: Action = c => {
-    val foo = getTestResultsInStatus().map(tcs => if (tcs.isEmpty) logger.info("No unaccounted errors!") else tcs.foreach(tc => logger.warn(s"No successes recorded for ${tc.className}#${tc.name}")))
-    await(execute(foo)(c))
+    val query = getTestCasesWithNoSuccesses().map(tcs =>
+      if (tcs.isEmpty) logger.info("No unaccounted errors!")
+      else {
+        logger.warn("No successes recorded for:")
+        tcs.groupBy(_.className).foreach {
+          case (clazz, tcs) =>
+            logger.warn(s"$clazz")
+            tcs.foreach(tc => logger.warn(s"\t${tc.name}"))
+        }
+      })
+    await(execute(query)(c))
   }
 
   val testResultReader: PartialFunction[File, Seq[TestResult]] = {
