@@ -6,7 +6,7 @@ import inquisitor.db.Queries._
 import inquisitor.io.Files
 import inquisitor.db.Schema._
 import java.io.File
-import slick.driver.SQLiteDriver.api._
+import slick.jdbc.SQLiteProfile.api._
 import com.lucidchart.open.xtract.XmlReader
 import scala.xml.XML
 import java.nio.file.Paths
@@ -52,7 +52,11 @@ object Actions extends StrictLogging {
     case x if x.getName.endsWith(".xml") => XmlReader.of[TestSuite].read(XML.loadFile(x)).fold(logParseError(x)_)(logParseSuccess(x)_)
   }
 
-  def await[T](future: Future[T]) = Await.result(future, 30 seconds)
+  def await[T](future: Future[T]) = {
+    // Import the postfixOps language feature to keep the compiler from complaining about the use of the `seconds` operator.
+    import scala.language.postfixOps
+    Await.result(future, 30 seconds)
+  }
 
   def execute[T](dbio: DBIOAction[T, NoStream, Effect.All])(config: Config) = {
     val db = Database.forURL(buildSqliteUrl(config.outFile), driver = "org.sqlite.JDBC")

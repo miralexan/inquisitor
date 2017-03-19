@@ -3,11 +3,13 @@ import Dependencies._
 lazy val root = (project in file(".")).
   settings(
     inThisBuild(List(
+      name := "inquisitor",
       organization := "com.example",
       scalaVersion := "2.11.8",
-      version      := "0.2.0-SNAPSHOT"
+      version      := "0.2.0-SNAPSHOT",
+      scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
     )),
-    name := "Inquisitor",
+    
     libraryDependencies += scalaTest % Test,
     libraryDependencies += "com.typesafe.slick" %% "slick" % "3.2.0",
     libraryDependencies += "com.lucidchart" %% "xtract" % "1.1.1",

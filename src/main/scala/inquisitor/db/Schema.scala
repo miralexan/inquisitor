@@ -1,6 +1,6 @@
 package inquisitor.db
 
-import slick.driver.SQLiteDriver.api._
+import slick.jdbc.SQLiteProfile.api._
 import java.time.Duration
 import inquisitor.xml.Model._
 
