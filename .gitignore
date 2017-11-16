@@ -9,6 +9,7 @@ project/boot/
 project/plugins/project/
 .history
 .cache
+.cache-tests
 .lib/
 
 .cache-main
@@ -17,3 +18,5 @@ project/plugins/project/
 .settings/
 bin/
 
+.idea/
+project/project
