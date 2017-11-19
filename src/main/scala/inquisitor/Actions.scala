@@ -65,7 +65,7 @@ object Actions extends StrictLogging {
     databaseExecution
   }
 
-  def buildSqliteUrl(f: File) = new URI("jdbc:sqlite", f.toString(), null).toString()
+  def buildSqliteUrl(f: File) = "jdbc:sqlite:" + f.toString()
 
   def getTestCaseMap(rows: Traversable[(Int, String, String)]) =
     if (rows.isEmpty) Map.empty[TestCase, Int]
