@@ -1,23 +1,23 @@
 package inquisitor
 
-import com.typesafe.scalalogging.StrictLogging
-import inquisitor.xml.Model._
-import inquisitor.db.Queries._
-import inquisitor.io.Files
-import inquisitor.db.Schema._
 import java.io.File
+
+import com.lucidchart.open.xtract.{ParseError, XmlReader}
+import com.typesafe.scalalogging.StrictLogging
+import inquisitor.db.Queries._
+import inquisitor.db.Schema._
+import inquisitor.io.Files
+import inquisitor.model._
+import inquisitor.xml.XmlReaders._
 import slick.jdbc.SQLiteProfile.api._
-import com.lucidchart.open.xtract.XmlReader
-import scala.xml.XML
-import java.nio.file.Paths
+
 import scala.concurrent.duration._
-import scala.concurrent.Await
-import com.lucidchart.open.xtract.ParseError
-import java.net.URI
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
+import scala.xml.XML
 
 object Actions extends StrictLogging {
   import Configuration._
+
   import scala.concurrent.ExecutionContext.Implicits.global
 
   type Action = Config => Unit

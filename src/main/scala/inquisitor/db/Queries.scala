@@ -1,10 +1,10 @@
 package inquisitor.db
 
-import slick.jdbc.SQLiteProfile.api._
-import scala.concurrent.ExecutionContext
-import slick.sql.FixedSqlAction
-import inquisitor.xml.Model._
 import inquisitor.db.Schema._
+import inquisitor.model._
+import slick.jdbc.SQLiteProfile.api._
+
+import scala.concurrent.ExecutionContext
 
 object Queries {
 

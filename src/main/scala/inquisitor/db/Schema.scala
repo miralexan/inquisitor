@@ -1,8 +1,9 @@
 package inquisitor.db
 
-import slick.jdbc.SQLiteProfile.api._
 import java.time.Duration
-import inquisitor.xml.Model._
+
+import inquisitor.model._
+import slick.jdbc.SQLiteProfile.api._
 
 object Schema {
 
