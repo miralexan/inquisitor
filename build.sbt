@@ -1,10 +1,10 @@
-lazy val inquisitor = (project in file(".")).
-  settings(
+lazy val inquisitor = (project in file("."))
+  .settings(
     inThisBuild(List(
       name := "inquisitor",
       organization := "com.example",
       scalaVersion := "2.11.8",
-      version      := "0.2.0-SNAPSHOT",
+      version      := "0.2.1-BETA-SNAPSHOT",
       scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
     )),
 
