@@ -1,0 +1,36 @@
+plugins {
+    id 'scala'
+    id 'idea'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
+}
+
+mainClassName = 'inquisitor.Inquisitor'
+version = '0.2.1-BETA-SNAPSHOT'
+
+compileScala{
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    options.compilerArgs = ['-unchecked', '-deprecation', '-feature']
+}
+
+dependencies {
+    implementation 'org.scala-lang:scala-library:2.11.12'
+    implementation 'com.typesafe.slick:slick_2.11:3.2.0'
+    implementation 'com.lucidchart:xtract_2.11:1.1.1'
+    implementation 'com.typesafe.scala-logging:scala-logging_2.11:3.5.0'
+    implementation 'com.github.scopt:scopt_2.11:3.5.0'
+    runtimeOnly    'org.slf4j:slf4j-simple:1.7.24'
+    runtimeOnly    'org.xerial:sqlite-jdbc:3.16.1'
+}
+
+repositories {
+    mavenCentral()
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
